@@ -21,6 +21,16 @@ class Kanata < Formula
     system "cargo", "install", *std_cargo_args
   end
 
+  service do
+    require_root true
+    run [opt_bin/"kanata", "--no-wait"]
+    keep_alive successful_exit: true
+    environment_variables PATH: std_service_path_env
+    error_log_path var/"log/kanata.log"
+    log_path var/"log/kanata.log"
+    working_dir Dir.home
+  end
+
   test do
     (testpath/"kanata.kbd").write <<~LISP
       (defsrc
